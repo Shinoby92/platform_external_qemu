@@ -126,23 +126,22 @@ modem_driver_read( void*  _md, const uint8_t*  src, int  len )
 
 
 static void
-modem_driver_init( int  base_port, ModemDriver*  dm, CharDriverState*  cs )
+modem_driver_init( int  base_port, char* imei, char* imsi, ModemDriver*  dm, CharDriverState*  cs )
 {
     dm->cs     = cs;
     dm->in_pos = 0;
     dm->in_sms = 0;
-    dm->modem  = amodem_create( base_port, modem_driver_unsol, dm );
+    dm->modem  = amodem_create( base_port, imei, imsi, modem_driver_unsol, dm );
 
     qemu_chr_add_handlers( cs, modem_driver_can_read, modem_driver_read, NULL, dm );
 }
 
-
-void android_modem_init( int  base_port )
+void android_modem_init( int  base_port, char* imei, char* imsi )
 {
     static ModemDriver  modem_driver[1];
 
     if (android_modem_cs != NULL) {
-        modem_driver_init( base_port, modem_driver, android_modem_cs );
+        modem_driver_init( base_port, imei, imsi,modem_driver, android_modem_cs );
         android_modem = modem_driver->modem;
     }
 }

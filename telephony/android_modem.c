@@ -298,6 +298,9 @@ typedef struct AModemRec_
     int prl_version;
 
     const char *emergency_numbers[MAX_EMERGENCY_NUMBERS];
+
+    char* imei;
+    char* imsi; 
 } AModemRec;
 
 
@@ -576,7 +579,7 @@ static int  android_modem_state_load(QEMUFile *f, void  *opaque, int version_id)
 static AModemRec   _android_modem[1];
 
 AModem
-amodem_create( int  base_port, AModemUnsolFunc  unsol_func, void*  unsol_opaque )
+amodem_create( int  base_port, char* imei, char* imsi, AModemUnsolFunc  unsol_func, void*  unsol_opaque )
 {
     AModem  modem = _android_modem;
     char nvfname[MAX_PATH];
@@ -584,6 +587,8 @@ amodem_create( int  base_port, AModemUnsolFunc  unsol_func, void*  unsol_opaque 
     char *end = start + sizeof(nvfname);
 
     modem->base_port    = base_port;
+    modem->imei = imei;
+    modem->imsi = imsi;
     start = bufprint_config_file( start, end, "modem-nv-ram-" );
     start = bufprint( start, end, "%d", modem->base_port );
     modem->nvram_config_filename = strdup( nvfname );
@@ -2339,6 +2344,17 @@ handleHangup( const char*  cmd, AModem  modem )
     return NULL;
 }
 
+static const char*
+handleIMEI( const char*  cmd, AModem  modem )
+{
+    return modem->imei;
+}
+static const char*
+handleIMSI( const char*  cmd, AModem  modem )
+{
+    return modem->imsi;
+}
+
 
 /* a function used to deal with a non-trivial request */
 typedef const char*  (*ResponseHandler)(const char*  cmd, AModem  modem);
@@ -2442,6 +2458,8 @@ static const struct {
     { "!+VTS=", NULL, handleSetDialTone },
     { "+CIMI", OPERATOR_HOME_MCCMNC "000000000", NULL },   /* request internation subscriber identification number */
     { "+CGSN", "000000000000000", NULL },   /* request model version */
+    { "+CIMI", NULL, handleIMSI },   /* request internation subscriber identification number */
+    { "+CGSN", NULL, handleIMEI },   /* request model version */
     { "+CUSD=2",NULL, NULL }, /* Cancel USSD */
     { "+COPS=0", NULL, handleOperatorSelection }, /* set network selection to automatic */
     { "!+CMGD=", NULL, handleDeleteSMSonSIM }, /* delete SMS on SIM */

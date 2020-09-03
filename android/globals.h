@@ -40,4 +40,8 @@ extern AvdInfo*          android_avdInfo;
 /* the hardware configuration for this specific virtual device */
 extern AndroidHwConfig   android_hw[1];
 
+extern char* imei;
+extern char* imsi;
+extern char* phone_number;
+
 #endif /* _ANDROID_GLOBALS_H */

@@ -69,6 +69,8 @@
 
 #include "android/skin/winsys.h"
 
+#include "default_identifiers.h"
+
 SkinRotation  android_framebuffer_rotation;
 
 #define  STRINGIFY(x)   _STRINGIFY(x)
@@ -85,6 +87,10 @@ SkinRotation  android_framebuffer_rotation;
 extern int  control_console_start( int  port );  /* in control.c */
 
 extern int qemu_milli_needed;
+
+char* imei;
+char* imsi;
+char* phone_number;
 
 /* the default device DPI if none is specified by the skin
  */
@@ -942,6 +948,77 @@ int main(int argc, char **argv) {
         }
         args[n++] = "-android-hw";
         args[n++] = strdup(coreHwIniPath);
+
+
+        /* IMSI spoofing */
+        if (opts->imsi) {
+            //make sure IMSI is 15 digits long
+            if (strlen(opts->imsi) != 15) {
+                fprintf(stderr, "IMSI must be 15 digits long\n");
+                exit(1);
+            }
+
+            //make sure IMSI is all digits
+            int i;
+            for (i=0;i<strlen(opts->imsi);i++) {
+                if (opts->imsi[i] < '0' || opts->imsi[i] > '9') {
+                    fprintf(stderr, "IMSI must be all digits\n");
+                    exit(1);
+                }
+            }
+
+            imsi = opts->imsi;
+        }
+        else {
+            imsi = DEFAULT_IMSI;
+        }
+
+        /* IMEI spoofing */
+        if (opts->imei) {
+            //make sure IMEI is 15 digits long
+            if (strlen(opts->imei) != 15) {
+                fprintf(stderr, "IMEI must be 15 digits long\n");
+                exit(1);
+            }
+
+            //make sure IMEI is all digits
+            int i;
+            for (i=0;i<strlen(opts->imei);i++) {
+                if (opts->imei[i] < '0' || opts->imei[i] > '9') {
+                    fprintf(stderr, "IMEI must be all digits\n");
+            exit(1);
+                }
+            }
+
+            imei = opts->imei;
+        }
+        else {
+            imei = DEFAULT_IMEI;
+        }
+        if (opts->phone_number) {
+            //make sure phone number is 11 digits long
+            if (strlen(opts->phone_number) != 11) {
+                fprintf(stderr, "Phone number must be 11 digits long\n");
+                exit(1);
+            }
+
+            //make sure phone number is all digits
+            int i;
+            for (i=0;i<strlen(opts->phone_number);i++) {
+                if (opts->phone_number[i] < '0' || opts->phone_number[i] > '9') {
+                    fprintf(stderr, "Phone number must be all digits\n");
+                    exit(1);
+            }
+            }
+
+            phone_number = opts->phone_number;
+        }
+        else {
+            phone_number = DEFAULT_PHONE_NUMBER;
+        }
+
+
+
 
         /* In verbose mode, dump the file's content */
         if (VERBOSE_CHECK(init)) {

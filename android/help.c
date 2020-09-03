@@ -1541,6 +1541,30 @@ help_force_32bit(stralloc_t* out)
     );
 }
 
+static void
+help_imei(stralloc_t* out)
+{
+    PRINTF(
+    "  use '-imei <imei> to set the IMEI used by the emulator"
+    );
+} 
+
+static void
+help_imsi(stralloc_t* out)
+{
+    PRINTF(
+    "  use '-imsi <imsi> to set the IMSI used by the emulator"
+    );
+}
+
+static void
+help_phone_number(stralloc_t* out)
+{
+    PRINTF(
+    "  use '-phone_number <phone number> to set the phone number used by the emulator.  Use the 11 digit format, i.e. start with a 1."
+    );
+}
+
 #define  help_no_skin   NULL
 #define  help_netspeed  help_shaper
 #define  help_netdelay  help_shaper

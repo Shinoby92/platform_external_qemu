@@ -22,6 +22,8 @@
 #define  A_SIM_PIN_SIZE  4
 #define  A_SIM_PUK_SIZE  8
 
+char* phone_number;
+
 typedef struct ASimCardRec_ {
     ASimStatus  status;
     char        pin[ A_SIM_PIN_SIZE+1 ];
@@ -433,7 +435,7 @@ asimcard_io( ASimCard  sim, const char*  cmd )
 #endif
 
     if (!strcmp("+CRSM=178,28480,1,4,32", cmd)) {
-        snprintf( sim->out_buff, sizeof(sim->out_buff), "+CRSM: 144,0,ffffffffffffffffffffffffffffffffffff0781515525%d1%d%df%dffffffffffff", (sim->port / 1000) % 10, (sim->port / 10) % 10, (sim->port / 100) % 10, sim->port % 10);
+        snprintf( sim->out_buff, sizeof(sim->out_buff), "+CRSM: 144,0,ffffffffffffffffffffffffffffffffffff0781%c%c%c%C%c%c%c%c%c%cf%cffffffffffff", phone_number[1], phone_number[0], phone_number[3], phone_number[2], phone_number[5], phone_number[4], phone_number[7], phone_number[6], phone_number[9], phone_number[8], phone_number[10]);
         return sim->out_buff;
         }
 

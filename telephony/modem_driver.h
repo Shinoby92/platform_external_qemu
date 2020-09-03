@@ -24,6 +24,6 @@ extern CharDriverState*  android_modem_cs;
 extern AModem  android_modem;
 
 /* must be called before the VM runs if there is a modem to emulate */
-extern void   android_modem_init( int  base_port );
+extern void   android_modem_init( int  base_port, char* imei, char* imsi );
 
 #endif /* _modem_driver_h */

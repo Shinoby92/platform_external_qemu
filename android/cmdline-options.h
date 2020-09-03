@@ -148,6 +148,13 @@ OPT_LIST(  prop, "<name>=<value>", "set system property on boot")
 
 OPT_PARAM( shared_net_id, "<number>", "join the shared network, using IP address 10.1.2.<number>")
 
+OPT_PARAM( imei, "<imei>", "set the phone's IMEI")
+
+OPT_PARAM( imsi, "<imsi>", "set the phone's IMSI")
+
+OPT_PARAM( phone_number, "<phone_number>", "set the phone number (use 11 digit format, i.e. start with a 1)")
+
+
 #ifdef CONFIG_NAND_LIMITS
 OPT_PARAM( nand_limits, "<nlimits>", "enforce NAND/Flash read/write thresholds" )
 #endif

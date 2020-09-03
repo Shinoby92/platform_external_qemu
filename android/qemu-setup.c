@@ -48,6 +48,11 @@ char* op_http_proxy = NULL;
 /* Base port for the emulated system. */
 int    android_base_port;
 
+/* simulted IMEI */
+char* imei;
+/* simulted IMSI */
+char* imsi;
+
 /* Strings describing the host system's OpenGL implementation */
 char android_gl_vendor[ANDROID_GLSTRING_BUF_SIZE];
 char android_gl_renderer[ANDROID_GLSTRING_BUF_SIZE];
@@ -355,6 +360,7 @@ void  android_emulation_setup( void )
     }
 
     android_modem_init( base_port );
+    android_modem_init( base_port, imei, imsi );
 
     /* Save base port. */
     android_base_port = base_port;
